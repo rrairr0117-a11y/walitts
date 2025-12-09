@@ -144,11 +144,15 @@
                 <!-- 项目根路径（选择文件夹 + 只读可复制） -->
                 <el-form-item label="项目根路径" prop="project_root_path">
                     <el-input v-model="form.project_root_path" readonly
-                        placeholder="例如：D:\\Works\\MyProject 或 /Users/me/Projects/demo">
+                        placeholder="Docker: G:\indextts2\waliTTS\wali\outputs">
                         <template #append>
                             <el-button @click="pickRootDir">选择</el-button>
+                            <el-button @click="useDefaultOutputs">使用默认</el-button>
                         </template>
                     </el-input>
+                    <div style="color: #909399; font-size: 12px; margin-top: 4px;">
+                        💡 提示：使用 Docker 后端时，请选择 outputs 目录（已挂载到容器）
+                    </div>
                 </el-form-item>
 
 
@@ -305,6 +309,12 @@ const pickRootDir = async () => {
     } catch (e) {
         ElMessage.error(`选择失败：${e?.message || '未知错误'}`)
     }
+}
+
+// 使用默认 outputs 目录（Docker 挂载目录）
+const useDefaultOutputs = () => {
+    form.value.project_root_path = 'G:\\indextts2\\waliTTS\\wali\\outputs'
+    ElMessage.success('已设置为 Docker 挂载的 outputs 目录')
 }
 </script>
 

@@ -1,0 +1,58 @@
+name: Build and Sign with SignPath
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Build Electron app
+      run: npm run build:win
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    # 使用 SignPath 签名（开源项目免费）
+    - name: Sign with SignPath
+      uses: signpath/github-action-submit-signing-request@v0.3
+      with:
+        api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+        organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+        project-slug: 'walitts'
+        signing-policy-slug: 'release-signing'
+        artifact-configuration-slug: 'electron-app'
+        input-artifact-path: 'release/*.exe'
+        output-artifact-path: 'release/signed'
+        wait-for-completion: true
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: WaliTTS-Windows-Signed
+        path: release/signed/*.exe
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: release/signed/*.exe
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

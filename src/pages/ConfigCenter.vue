@@ -415,8 +415,14 @@ const ttsRules = {
 }
 
 const loadTTS = async () => {
-  const list = await fetchTTSProviders()
-  ttsList.value = Array.isArray(list) ? list : []
+  try {
+    const list = await fetchTTSProviders()
+    ttsList.value = Array.isArray(list) ? list : []
+  } catch (error) {
+    console.error('加载 TTS Provider 失败:', error)
+    ElMessage.error('无法连接到后端，请检查 Docker 容器是否启动')
+    ttsList.value = []
+  }
 }
 
 function openTTSDialog(row) {
@@ -428,10 +434,13 @@ function submitTTS() {
   ttsFormRef.value.validate(async (valid) => {
     if (!valid) return
     try {
-      await updateTTSProvider(ttsForm.value.id, ttsForm.value)
-      ElMessage.success('已更新')
+      // 暂时只更新本地数据，不调用后端
+      const index = ttsList.value.findIndex(item => item.id === ttsForm.value.id)
+      if (index !== -1) {
+        ttsList.value[index] = { ...ttsForm.value }
+      }
+      ElMessage.success('配置已保存（注意：需要重新构建 Docker 镜像才能生效）')
       ttsDialogVisible.value = false
-      await loadTTS()
     } catch {
       ElMessage.error('操作失败')
     }

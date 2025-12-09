@@ -58,7 +58,7 @@ function waitForBackendReady(retries = 60, delay = 500) {
   return new Promise((resolve, reject) => {
     let attempts = 0
     const check = () => {
-      const req = http.get('http://127.0.0.1:8200/docs', res => {
+      const req = http.get('http://127.0.0.1:8300/', res => {
         res.destroy()
         resolve(true)
       }).on('error', err => {

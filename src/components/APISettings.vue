@@ -8,23 +8,16 @@
       </template>
       
       <el-form label-width="120px">
-        <el-form-item label="API 类型">
-          <el-radio-group v-model="apiType" @change="handleAPIChange">
-            <el-radio label="local">本地 Docker 后端</el-radio>
-            <el-radio label="remote">远程 TTS 服务</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        
-        <el-form-item label="当前地址">
+        <el-form-item label="后端地址">
           <el-input v-model="currentAPI" readonly>
             <template #append>
-              <el-button @click="testConnection">测试连接</el-button>
+              <el-button @click="testConnection" type="primary">测试连接</el-button>
             </template>
           </el-input>
         </el-form-item>
         
         <el-form-item label="连接状态">
-          <el-tag :type="connectionStatus.type">
+          <el-tag :type="connectionStatus.type" size="large">
             {{ connectionStatus.text }}
           </el-tag>
         </el-form-item>
@@ -38,8 +31,10 @@
           show-icon
         >
           <ul>
-            <li><strong>本地 Docker 后端：</strong>需要先启动 Docker 容器（docker-compose up -d）</li>
-            <li><strong>远程 TTS 服务：</strong>使用云端 TTS 服务（如仙宫云），需要配置 API 密钥</li>
+            <li><strong>本地 Docker 后端：</strong>需要先启动 Docker 容器</li>
+            <li><strong>启动命令：</strong><code>docker-compose up -d</code></li>
+            <li><strong>查看日志：</strong><code>docker logs wali-tts-backend</code></li>
+            <li><strong>停止服务：</strong><code>docker-compose down</code></li>
           </ul>
         </el-alert>
       </el-form>
@@ -50,10 +45,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { switchAPI, getCurrentAPI, API_ENDPOINTS } from '../api/config'
+import { API_ENDPOINTS } from '../api/config'
 import service from '../api/config'
 
-const apiType = ref('local')
 const currentAPI = ref('')
 const connectionStatus = ref({
   type: 'info',
@@ -61,24 +55,9 @@ const connectionStatus = ref({
 })
 
 onMounted(() => {
-  currentAPI.value = getCurrentAPI()
-  // 判断当前使用的是哪个 API
-  if (currentAPI.value === API_ENDPOINTS.local) {
-    apiType.value = 'local'
-  } else {
-    apiType.value = 'remote'
-  }
+  // 固定使用本地 Docker 后端
+  currentAPI.value = API_ENDPOINTS.local
 })
-
-const handleAPIChange = (value) => {
-  switchAPI(value)
-  currentAPI.value = getCurrentAPI()
-  ElMessage.success('API 已切换，请测试连接')
-  connectionStatus.value = {
-    type: 'info',
-    text: '未测试'
-  }
-}
 
 const testConnection = async () => {
   connectionStatus.value = {
@@ -90,15 +69,15 @@ const testConnection = async () => {
     const response = await service.get('/')
     connectionStatus.value = {
       type: 'success',
-      text: '连接成功'
+      text: '✅ 连接成功'
     }
-    ElMessage.success('后端连接正常')
+    ElMessage.success('Docker 后端连接正常！')
   } catch (error) {
     connectionStatus.value = {
       type: 'danger',
-      text: '连接失败'
+      text: '❌ 连接失败'
     }
-    ElMessage.error('无法连接到后端，请检查服务是否启动')
+    ElMessage.error('无法连接到 Docker 后端，请检查容器是否启动')
   }
 }
 </script>

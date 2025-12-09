@@ -171,7 +171,10 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { ElMessage, ElLoading } from 'element-plus'
+import { useRouter } from 'vue-router'
 // import { Plus, Delete } from '@element-plus/icons-vue'
+
+const router = useRouter()
 import { fetchProjects, createProject, deleteProject } from '../api/project'
 import { fetchLLMProviders, fetchTTSProviders } from '../api/provider'
 import { fetchPromptList } from '../api/prompt'
@@ -265,33 +268,47 @@ const handleDelete = async (id) => {
 // 提交表单
 const handleSubmit = () => {
     formRef.value.validate(async (valid) => {
-        if (valid) {
-            try {
-                const res = await createProject(form.value)
-                if (res?.code === 200) {
-                    ElMessage.success('项目创建成功')
-                    dialogVisible.value = false
+        if (!valid) {
+            console.log('表单验证失败')
+            return
+        }
+        
+        try {
+            console.log('提交项目数据:', form.value)
+            const res = await createProject(form.value)
+            console.log('创建项目响应:', res)
+            
+            if (res?.code === 200) {
+                ElMessage.success('项目创建成功')
+                dialogVisible.value = false
 
-                    // ✅ 重置表单
-                    Object.assign(form.value, {
-                        name: '',
-                        description: '',
-                        llm_provider_id: null,
-                        llm_model: null,
-                        tts_provider_id: null,
-                        prompt_id: null,
-                        is_precise_fill: 0,
-                        project_root_path: null,
-                    })
+                // ✅ 重置表单
+                Object.assign(form.value, {
+                    name: '',
+                    description: '',
+                    llm_provider_id: null,
+                    llm_model: null,
+                    tts_provider_id: null,
+                    prompt_id: null,
+                    is_precise_fill: 0,
+                    project_root_path: null,
+                })
 
-                    projects.value = await fetchProjects()
-                } else {
-                    // ✅ 正常请求但业务失败
-                    ElMessage.error(`创建失败：${res?.message || '未知错误'}`)
+                // 刷新项目列表
+                projects.value = await fetchProjects()
+                
+                // 跳转到项目详情页
+                if (res.data?.id) {
+                    router.push(`/project-dubbing/${res.data.id}`)
                 }
-            } catch (e) {
-                ElMessage.error(`创建失败：${e?.message || '网络异常'}`)
+            } else {
+                // ✅ 正常请求但业务失败
+                console.error('业务失败:', res)
+                ElMessage.error(`创建失败：${res?.message || '未知错误'}`)
             }
+        } catch (e) {
+            console.error('创建项目异常:', e)
+            ElMessage.error(`创建失败：${e?.message || '网络异常'}`)
         }
     })
 }

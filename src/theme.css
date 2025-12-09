@@ -1,0 +1,294 @@
+/* ========================================
+   瓦力配音工坊 - 暖色系主题样式
+   ======================================== */
+
+/* 全局变量 */
+:root {
+  /* 主色调 - 暖色系渐变 */
+  --primary-color: #ff6b6b;
+  --primary-light: #ffa94d;
+  --primary-lighter: #ffd43b;
+  
+  /* 背景色 */
+  --bg-gradient-start: #fff5f0;
+  --bg-gradient-end: #ffe8e0;
+  
+  /* 文字颜色 */
+  --text-primary: #4a2c2a;
+  --text-secondary: #6b4423;
+  --text-light: #8b6239;
+  
+  /* 边框颜色 */
+  --border-color: rgba(255, 107, 107, 0.2);
+  --border-hover: rgba(255, 107, 107, 0.4);
+  
+  /* 阴影 */
+  --shadow-sm: 0 2px 8px rgba(255, 107, 107, 0.1);
+  --shadow-md: 0 4px 16px rgba(255, 107, 107, 0.15);
+  --shadow-lg: 0 8px 24px rgba(255, 107, 107, 0.2);
+}
+
+/* ========================================
+   Element Plus 组件覆盖样式
+   ======================================== */
+
+/* 卡片样式 */
+.el-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 245, 240, 0.9) 100%) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.3s ease !important;
+}
+
+.el-card:hover {
+  border-color: var(--border-hover) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
+.el-card__header {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 193, 7, 0.05) 100%) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  font-weight: 600;
+}
+
+/* 按钮样式 */
+.el-button--primary {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ffa94d 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.el-button--primary:hover {
+  background: linear-gradient(135deg, #ff5252 0%, #ff9a3d 100%) !important;
+  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.el-button--success {
+  background: linear-gradient(135deg, #ffa94d 0%, #ffd43b 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(255, 169, 77, 0.3) !important;
+}
+
+.el-button--success:hover {
+  background: linear-gradient(135deg, #ff9a3d 0%, #ffc42b 100%) !important;
+  box-shadow: 0 6px 16px rgba(255, 169, 77, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.el-button--default {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 193, 7, 0.05) 100%) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.el-button--default:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.12) 0%, rgba(255, 193, 7, 0.08) 100%) !important;
+  border-color: var(--border-hover) !important;
+}
+
+/* 输入框样式 */
+.el-input__wrapper {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.3s ease !important;
+}
+
+.el-input__wrapper:hover {
+  border-color: var(--border-hover) !important;
+}
+
+.el-input__wrapper.is-focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1) !important;
+}
+
+.el-textarea__inner {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+}
+
+/* 对话框/弹窗样式 */
+.el-dialog {
+  background: linear-gradient(135deg, #ffffff 0%, #fff5f0 100%) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.el-dialog__header {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 193, 7, 0.06) 100%) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  border-radius: 16px 16px 0 0 !important;
+  padding: 20px !important;
+}
+
+.el-dialog__title {
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+}
+
+.el-dialog__body {
+  padding: 24px !important;
+}
+
+.el-dialog__footer {
+  border-top: 1px solid var(--border-color) !important;
+  padding: 16px 24px !important;
+}
+
+/* 表格样式 */
+.el-table {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.el-table__header {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 193, 7, 0.05) 100%) !important;
+}
+
+.el-table th {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+}
+
+.el-table tr:hover > td {
+  background: rgba(255, 107, 107, 0.05) !important;
+}
+
+.el-table__row {
+  transition: all 0.3s ease;
+}
+
+/* 标签样式 */
+.el-tag {
+  border-radius: 6px !important;
+  border: none !important;
+  font-weight: 500 !important;
+}
+
+.el-tag--primary {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 169, 77, 0.12) 100%) !important;
+  color: #ff6b6b !important;
+}
+
+.el-tag--success {
+  background: linear-gradient(135deg, rgba(255, 169, 77, 0.15) 0%, rgba(255, 212, 59, 0.12) 100%) !important;
+  color: #ffa94d !important;
+}
+
+/* 消息提示样式 */
+.el-message {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.el-message--success {
+  background: linear-gradient(135deg, rgba(255, 169, 77, 0.95) 0%, rgba(255, 212, 59, 0.9) 100%) !important;
+}
+
+.el-message--error {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.95) 0%, rgba(255, 154, 107, 0.9) 100%) !important;
+}
+
+/* 下拉选择器 */
+.el-select-dropdown {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.el-select-dropdown__item:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 193, 7, 0.05) 100%) !important;
+}
+
+.el-select-dropdown__item.selected {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 193, 7, 0.1) 100%) !important;
+  color: var(--primary-color) !important;
+  font-weight: 600;
+}
+
+/* 分页器 */
+.el-pagination {
+  padding: 16px 0 !important;
+}
+
+.el-pagination button {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 193, 7, 0.05) 100%) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  color: var(--text-primary) !important;
+}
+
+.el-pagination button:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.12) 0%, rgba(255, 193, 7, 0.08) 100%) !important;
+  border-color: var(--border-hover) !important;
+}
+
+.el-pager li {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 193, 7, 0.05) 100%) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  color: var(--text-primary) !important;
+  margin: 0 4px !important;
+}
+
+.el-pager li:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.12) 0%, rgba(255, 193, 7, 0.08) 100%) !important;
+  border-color: var(--border-hover) !important;
+}
+
+.el-pager li.active {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ffa94d 100%) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+/* 加载动画 */
+.el-loading-mask {
+  background: rgba(255, 245, 240, 0.9) !important;
+}
+
+.el-loading-spinner .circular {
+  stroke: var(--primary-color) !important;
+}
+
+/* 开关 */
+.el-switch.is-checked .el-switch__core {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ffa94d 100%) !important;
+  border: none !important;
+}
+
+/* 滑块 */
+.el-slider__bar {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ffa94d 100%) !important;
+}
+
+.el-slider__button {
+  border: 2px solid var(--primary-color) !important;
+}
+
+/* 进度条 */
+.el-progress-bar__inner {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ffa94d 100%) !important;
+}
+
+/* 徽章 */
+.el-badge__content {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ffa94d 100%) !important;
+  border: none !important;
+}

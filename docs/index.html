@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瓦力魔音工坊 - WaliTTS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+        
+        .badges {
+            margin: 20px 0;
+        }
+        
+        .badges img {
+            margin: 0 5px;
+        }
+        
+        .content {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            padding: 20px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .download-section {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tech-badge {
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .screenshot {
+            width: 100%;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🎙️ 瓦力魔音工坊</h1>
+            <p>WaliTTS - 基于 IndexTTS-2 的智能配音工具</p>
+            <div class="badges">
+                <img src="https://img.shields.io/github/stars/rrairr0117-a11y/walitts?style=social" alt="Stars">
+                <img src="https://img.shields.io/github/license/rrairr0117-a11y/walitts" alt="License">
+                <img src="https://img.shields.io/github/v/release/rrairr0117-a11y/walitts" alt="Release">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <h2>✨ 项目简介</h2>
+            <p>瓦力魔音工坊是一款基于 <strong>IndexTTS-2</strong> 的专业 AI 配音工具，提供多音色、多情绪的智能语音合成服务。支持小说、剧本、视频等多种内容的自动配音与导出。</p>
+            
+            <h2 style="margin-top: 40px;">🚀 核心特性</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>🎭 多音色支持</h3>
+                    <p>支持自定义音色库，一键克隆任意音色，满足不同场景需求</p>
+                </div>
+                <div class="feature-card">
+                    <h3>😊 情绪控制</h3>
+                    <p>精准控制语音情绪，支持文本描述和向量控制两种模式</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📝 剧本管理</h3>
+                    <p>完整的项目、章节、角色管理系统，支持批量配音</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤖 AI 辅助</h3>
+                    <p>集成 LLM 大模型，智能生成配音脚本和情绪标注</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🐳 Docker 部署</h3>
+                    <p>后端 Docker 化，一键启动，跨平台兼容</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔒 代码加密</h3>
+                    <p>业务代码 Pyarmor 加密，保护核心逻辑</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h2>📦 立即下载</h2>
+            <p style="margin: 20px 0;">选择适合您的版本</p>
+            <a href="https://github.com/rrairr0117-a11y/walitts/releases/latest" class="download-btn">
+                💻 Windows 版本
+            </a>
+            <a href="https://github.com/rrairr0117-a11y/walitts" class="download-btn">
+                📖 查看源码
+            </a>
+        </div>
+
+        <div class="content">
+            <h2>🛠️ 技术栈</h2>
+            <div class="tech-stack">
+                <span class="tech-badge">Vue 3</span>
+                <span class="tech-badge">Electron</span>
+                <span class="tech-badge">FastAPI</span>
+                <span class="tech-badge">IndexTTS-2</span>
+                <span class="tech-badge">Docker</span>
+                <span class="tech-badge">PyTorch</span>
+                <span class="tech-badge">Transformers</span>
+                <span class="tech-badge">Element Plus</span>
+            </div>
+
+            <h2 style="margin-top: 40px;">📚 快速开始</h2>
+            
+            <h3>1. 下载并安装</h3>
+            <p>从 <a href="https://github.com/rrairr0117-a11y/walitts/releases">Releases</a> 下载最新版本的安装包</p>
+
+            <h3>2. 启动后端服务</h3>
+            <pre>docker-compose up -d</pre>
+
+            <h3>3. 运行前端应用</h3>
+            <p>双击运行下载的 EXE 文件即可</p>
+
+            <h3>4. 开始使用</h3>
+            <ul style="margin-left: 20px;">
+                <li>创建项目和角色</li>
+                <li>上传参考音频</li>
+                <li>输入配音文本</li>
+                <li>一键生成配音</li>
+            </ul>
+
+            <h2 style="margin-top: 40px;">🏗️ 架构说明</h2>
+            <pre>
+前端（Electron + Vue 3）
+    ↓ HTTP API
+后端（FastAPI + Docker）
+    ├── 加密的业务代码
+    ├── IndexTTS-2 TTS 引擎
+    └── 数据库和文件存储
+            </pre>
+
+            <h2 style="margin-top: 40px;">🤝 贡献指南</h2>
+            <p>欢迎提交 Issue 和 Pull Request！</p>
+            <ol style="margin-left: 20px;">
+                <li>Fork 本仓库</li>
+                <li>创建特性分支 (<code>git checkout -b feature/AmazingFeature</code>)</li>
+                <li>提交更改 (<code>git commit -m 'Add some AmazingFeature'</code>)</li>
+                <li>推送到分支 (<code>git push origin feature/AmazingFeature</code>)</li>
+                <li>开启 Pull Request</li>
+            </ol>
+
+            <h2 style="margin-top: 40px;">📄 开源协议</h2>
+            <p>本项目采用 MIT 协议开源</p>
+
+            <h2 style="margin-top: 40px;">⚠️ 注意事项</h2>
+            <ul style="margin-left: 20px;">
+                <li>前端代码开源，后端业务逻辑加密保护</li>
+                <li>需要配合 Docker 后端使用</li>
+                <li>首次运行需要下载 TTS 模型（约 2GB）</li>
+                <li>建议使用 GPU 以获得更好的性能</li>
+            </ul>
+
+            <h2 style="margin-top: 40px;">📞 联系方式</h2>
+            <p>如有问题或建议，欢迎通过以下方式联系：</p>
+            <ul style="margin-left: 20px;">
+                <li>GitHub Issues: <a href="https://github.com/rrairr0117-a11y/walitts/issues">提交问题</a></li>
+                <li>Email: your-email@example.com</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 瓦力魔音工坊 | Made with ❤️ by WaliTTS Team</p>
+            <p style="margin-top: 10px;">
+                <a href="https://github.com/rrairr0117-a11y/walitts" style="color: white;">GitHub</a> |
+                <a href="https://github.com/rrairr0117-a11y/walitts/releases" style="color: white;">下载</a> |
+                <a href="https://github.com/rrairr0117-a11y/walitts/issues" style="color: white;">反馈</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

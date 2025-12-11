@@ -10,17 +10,29 @@
    - 需要 NVIDIA GPU 和 CUDA 支持
 
 2. **准备数据目录**
+
+   ⚠️ **重要**：首次启动需要准备模型文件
+   
    ```
    backend/
    ├── docker-compose.yml    # Docker 配置文件
-   ├── wali.db              # 数据库文件
-   ├── checkpoints/         # TTS 模型文件（4.5GB）
-   ├── outputs/             # 项目音频输出
-   ├── output/              # 时间轴音频输出
-   ├── voices/              # 音色文件
-   ├── prompts/             # 参考音频
-   └── huggingface_cache/   # HuggingFace 缓存
+   ├── wali.db              # 数据库文件（启动时自动创建）
+   ├── checkpoints/         # TTS 模型文件（4.5GB，必需！）
+   ├── outputs/             # 项目音频输出（自动创建）
+   ├── output/              # 时间轴音频输出（自动创建）
+   ├── voices/              # 音色文件（自动创建）
+   ├── prompts/             # 参考音频（自动创建）
+   └── huggingface_cache/   # HuggingFace 缓存（自动创建）
    ```
+
+   **必需文件**：
+   - `checkpoints/`：TTS模型文件目录，包含 gpt.pth、s2mel.pth 等模型
+     - 从完整分发包中复制
+     - 或单独下载模型文件
+
+   **自动创建**：
+   - `wali.db`：首次启动时自动创建空数据库
+   - 其他目录：启动脚本自动创建
 
 ### 快速启动
 
@@ -93,18 +105,48 @@ docker ps
 
 ### 故障排查
 
-#### 1. 容器无法启动
+#### 1. 数据库建表失败
+
+**错误信息**：
+```
+ERROR: 数据库建表失败:
+(sqlite3.OperationalError) unable to open database file
+```
+
+**原因**：Docker挂载时 `wali.db` 文件不存在
+
+**解决方法**：
+```bash
+# 方法1：使用启动脚本（推荐，会自动创建）
+启动后端.bat
+
+# 方法2：手动创建空文件
+cd backend
+type nul > wali.db  # Windows
+# 或 touch wali.db  # Linux/Mac
+
+# 然后启动
+docker-compose up -d
+```
+
+**说明**：启动脚本会自动检查并创建 `wali.db` 文件，推荐使用启动脚本
+
+#### 2. 容器无法启动
 - 检查 Docker Desktop 是否运行
 - 检查 GPU 驱动是否安装
 - 查看日志：`docker-compose logs`
 
-#### 2. 模型加载失败
-- 确保 `checkpoints/` 目录包含所有模型文件
+#### 3. 模型加载失败
+- 确保 `checkpoints/` 目录包含所有模型文件：
+  - `gpt.pth` (约3.4GB)
+  - `s2mel.pth` (约1.2GB)
+  - 其他配置文件
 - 检查文件权限
 
-#### 3. 数据库连接失败
-- 确保 `wali.db` 文件存在
+#### 4. 数据库连接失败
+- 确保 `wali.db` 文件存在于 backend 目录
 - 检查文件路径是否正确
+- 确保文件没有被其他程序占用
 
 ### 网络配置
 

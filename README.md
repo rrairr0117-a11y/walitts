@@ -1,32 +1,10 @@
-# 瓦力魔音工坊 (WaliTTS)
+# 瓦力魔音工坊 - 前端
 
-> 基于 Electron + Vue 3 + Docker 的智能 TTS 配音工具
+> 基于 Electron + Vue 3 的 TTS 配音工具前端界面
 
-## 📦 快速开始
+## 📦 下载
 
-### 完整部署（前端 + 后端）
-
-1. **克隆仓库**
-```bash
-git clone https://github.com/rrairr0117-a11y/walitts.git
-cd walitts
-```
-
-2. **启动后端**（需要 Docker）
-```bash
-cd backend
-docker-compose up -d
-```
-
-3. **启动前端**
-```bash
-npm install
-npm start
-```
-
-### 仅下载前端
-
-从 [Releases](https://github.com/rrairr0117-a11y/walitts/releases) 下载最新版本的签名 EXE 文件。
+从 [Releases](https://github.com/your-username/walitts-frontend/releases) 下载最新版本的签名 EXE 文件。
 
 **所有发布的 EXE 文件都已通过 Microsoft 签名，可安全运行。**
 
@@ -77,52 +55,35 @@ npm run electron-build
 3. Azure 自动签名 EXE
 4. 发布到 Releases
 
-## 🐳 后端部署
+## 📝 后端配置
 
-### Docker 部署（推荐）
+**重要：** 前端是纯界面应用，不包含后端逻辑。需要配合后端 API 使用。
 
-详细说明请查看 [backend/README.md](./backend/README.md)
+### 方式 1：本地 Docker 后端（推荐）
 
-**快速启动：**
+1. 启动 Docker 后端：
 ```bash
-cd backend
 docker-compose up -d
 ```
 
-**镜像信息：**
-- 镜像：`crpi-gpb2zeuxu5n5h1lc.cn-chengdu.personal.cr.aliyuncs.com/rrairr/wali-indextts2:latest`
-- 大小：约 15.9GB
-- GPU：需要 NVIDIA GPU + CUDA
+2. 前端会自动连接到 `http://localhost:8300`
 
-**数据目录：**
-```
-backend/
-├── docker-compose.yml    # Docker 配置
-├── wali.db              # 数据库
-├── checkpoints/         # TTS 模型（4.5GB）
-├── outputs/             # 音频输出
-├── voices/              # 音色文件
-└── prompts/             # 参考音频
-```
-
-### 验证后端
-
+3. 验证后端运行：
 ```bash
-# 检查服务状态
-docker ps
-
-# 查看日志
-docker-compose logs -f
-
-# 测试 API
 curl http://localhost:8300/
 ```
+
+### 方式 2：远程 TTS 服务
+
+- 使用云端 TTS 服务（如仙宫云）
+- 在前端设置中切换 API 地址
+- 需要配置相应的 API 密钥
 
 ### 切换后端
 
 在应用设置页面可以切换本地/远程后端：
 - 设置 → API 设置
-- 选择后端类型（本地 Docker / 远程服务）
+- 选择后端类型
 - 测试连接
 
 ## 📄 许可证

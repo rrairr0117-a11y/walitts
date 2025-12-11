@@ -95,8 +95,8 @@ function createWindow() {
   })
   const isDev = !app.isPackaged
   if (isDev) {
-    // 开发环境：直连 Vite
-    win.loadURL('http://localhost:5173')
+    // 开发环境：直连 Vite（使用 127.0.0.1 避免 IPv6/IPv4 兼容性问题）
+    win.loadURL('http://127.0.0.1:5173')
     // win.webContents.openDevTools({ mode: 'detach' })  // 🔥 自动打开开发者工具（已禁用）
   } else {
     // 生产环境：直接加载打包后的静态文件，不阻塞首屏

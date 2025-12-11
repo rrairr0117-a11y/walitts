@@ -3,8 +3,9 @@ import axios from 'axios'
 
 // 后端 API 配置
 // 用户可以在设置中切换本地或远程后端
+// 注意：使用 127.0.0.1 而不是 localhost，避免 Windows IPv6/IPv4 兼容性问题
 const API_ENDPOINTS = {
-  local: 'http://127.0.0.1:8300',      // 本地 Docker 后端
+  local: 'http://127.0.0.1:8300',      // 本地 Docker 后端（强制 IPv4）
   remote: 'https://your-api.com'       // 远程 TTS 服务（仙宫云等）
 }
 

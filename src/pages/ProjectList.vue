@@ -144,13 +144,14 @@
                 <!-- 项目根路径（选择文件夹 + 只读可复制） -->
                 <el-form-item label="项目根路径" prop="project_root_path">
                     <el-input v-model="form.project_root_path"
-                        placeholder="请输入或选择项目输出目录">
-                        <template #append>
-                            <el-button @click="pickRootDir">选择</el-button>
-                        </template>
+                        placeholder="请选择项目根路径或使用默认">
                     </el-input>
-                    <div style="color: #909399; font-size: 12px; margin-top: 4px;">
-                        💡 提示：Docker环境请输入容器内路径（如：/app/IndexTTS-2/outputs），本地环境可选择本地目录
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <el-button @click="pickRootDir" size="small">📁 选择路径</el-button>
+                        <el-button @click="useDefaultOutputs" size="small" type="primary">🚀 使用默认</el-button>
+                    </div>
+                    <div style="color: #909399; font-size: 12px; margin-top: 8px;">
+                        💡 提示：使用 Docker 后端时，请选择 outputs 目录（已挂载到容器）
                     </div>
                 </el-form-item>
 
@@ -327,6 +328,12 @@ const pickRootDir = async () => {
     }
 }
 
+// 使用默认 outputs 目录（Docker 挂载目录）
+const useDefaultOutputs = () => {
+    // 使用当前工作目录下的 outputs 文件夹
+    form.value.project_root_path = 'F:\\n8n\\n8n-Wali\\WaLi-Voice-Wrokshop\\outputs'
+    ElMessage.success('已设置为 Docker 挂载的 outputs 目录')
+}
 </script>
 
 <style scoped>

@@ -36,6 +36,7 @@ services:
       - PYTHONUNBUFFERED=1
       - HF_HOME=/app/IndexTTS-2/huggingface_cache
       - TRANSFORMERS_CACHE=/app/IndexTTS-2/huggingface_cache
+      - HF_ENDPOINT=https://hf-mirror.com  # HuggingFace 国内镜像加速
     restart: unless-stopped
     networks:
       - wali-network

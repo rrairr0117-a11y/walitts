@@ -1,0 +1,51 @@
+# WaliTTS Docker Compose 配置
+# 使用方法：docker-compose up -d
+
+name: wali-tts
+
+services:
+  # WaliTTS 后端服务
+  wali-tts-backend:
+    image: crpi-gpb2zeuxu5n5h1lc.cn-chengdu.personal.cr.aliyuncs.com/rrairr/wali-indextts2:latest  # 使用已构建的镜像
+    container_name: wali-tts-backend
+    ports:
+      - "8300:8300"  # FastAPI 端口
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      # 挂载数据库文件（重要！持久化所有配置）
+      - ./wali.db:/app/IndexTTS-2/wali.db
+      # 挂载模型文件（必须！包含 TTS 模型）
+      - ./checkpoints:/app/IndexTTS-2/checkpoints
+      # 挂载输出目录（项目单句配音）
+      - ./outputs:/app/IndexTTS-2/outputs
+      # 挂载时间轴配音输出目录
+      - ./output:/app/IndexTTS-2/output
+      # 挂载参考音频目录（IndexTTS 使用）
+      - ./prompts:/app/IndexTTS-2/prompts
+      # 挂载 HuggingFace 缓存
+      - ./huggingface_cache:/app/IndexTTS-2/huggingface_cache
+      # 挂载音色文件目录（重要！用户上传的音色文件）
+      - ./voices:/app/IndexTTS-2/voices
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HF_HOME=/app/IndexTTS-2/huggingface_cache
+      - TRANSFORMERS_CACHE=/app/IndexTTS-2/huggingface_cache
+    restart: unless-stopped
+    networks:
+      - wali-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8300/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  wali-network:
+    driver: bridge

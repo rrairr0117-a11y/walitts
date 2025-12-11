@@ -44,6 +44,7 @@ import { VideoPlay, VideoPause } from '@element-plus/icons-vue'
 import WaveSurfer from 'wavesurfer.js'
 import Regions from 'wavesurfer.js/dist/plugins/regions.esm.js'
 import Minimap from 'wavesurfer.js/dist/plugins/minimap.esm.js'
+import { toAccessibleUrl } from '../utils/pathUtils'
 
 const props = defineProps({
   src: { type: String, required: true },     // 建议传 file://；否则会尝试转换
@@ -80,9 +81,8 @@ const tailSilence = ref(0) // 默认 0 秒
 const hasRegion = computed(() => !!region.value)
 
 function toUrl(src) {
-  if (!src) return ''
-  if (/^https?:\/\//i.test(src) || /^file:\/\//i.test(src)) return src
-  return window.native?.pathToFileUrl ? window.native.pathToFileUrl(src) : src
+  // 使用统一的路径转换函数
+  return toAccessibleUrl(src)
 }
 
 onMounted(async () => {

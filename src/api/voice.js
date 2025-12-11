@@ -1,9 +1,19 @@
 import request from './config'
 
-// 创建音色
+// 创建音色（旧接口，传路径）
 export function createVoice(payload) {
   // payload: { name, tts_provider_id, reference_path?, description? }
   return request.post('/voices', payload)
+}
+
+// 上传音频文件并创建音色（新接口）
+export function uploadAndCreateVoice(formData) {
+  // formData 包含: name, tts_provider_id, description, is_multi_emotion, audio_file
+  return request.post('/voices/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
 
 // 查询单个音色

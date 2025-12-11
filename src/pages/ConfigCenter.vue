@@ -434,14 +434,18 @@ function submitTTS() {
   ttsFormRef.value.validate(async (valid) => {
     if (!valid) return
     try {
-      // 暂时只更新本地数据，不调用后端
-      const index = ttsList.value.findIndex(item => item.id === ttsForm.value.id)
-      if (index !== -1) {
-        ttsList.value[index] = { ...ttsForm.value }
+      // 调用后端 API 更新
+      const res = await updateTTSProvider(ttsForm.value.id, ttsForm.value)
+      if (res?.code === 200) {
+        ElMessage.success('TTS 配置已保存')
+        ttsDialogVisible.value = false
+        // 重新加载列表
+        await loadTTS()
+      } else {
+        ElMessage.error(res?.message || '保存失败')
       }
-      ElMessage.success('配置已保存（注意：需要重新构建 Docker 镜像才能生效）')
-      ttsDialogVisible.value = false
-    } catch {
+    } catch (error) {
+      console.error('保存 TTS 配置失败:', error)
       ElMessage.error('操作失败')
     }
   })

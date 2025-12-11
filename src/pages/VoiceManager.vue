@@ -163,8 +163,9 @@
 import { ref, onMounted, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Headset } from '@element-plus/icons-vue'
-import { createVoice, fetchVoicesByTTS, updateVoice, deleteVoice } from '../api/voice'
+import { createVoice, fetchVoicesByTTS, updateVoice, deleteVoice, uploadAndCreateVoice } from '../api/voice'
 import { fetchTTSProviders } from '../api/provider'
+import { toAccessibleUrl } from '../utils/pathUtils'
 
 
 const defaultTags = ref([
@@ -190,7 +191,9 @@ const currentPath = ref(null)
 
 function togglePlay(absPath) {
   if (!absPath) return
-  const url = toFileUrl(absPath)
+  
+  // 使用统一的路径转换函数
+  const url = toAccessibleUrl(absPath)
   if (!url) {
     ElMessage.error('无法播放该音频文件')
     return
@@ -295,22 +298,61 @@ function submitForm() {
   formRef.value.validate(async (valid) => {
     if (!valid) return
     try {
-      const payload = {
-        name: form.value.name,
-        description: form.value.tags.length ? form.value.tags.join(',') : null,
-        tts_provider_id: form.value.tts_provider_id,
-        reference_path: form.value.reference_path || null
-      }
-
       if (form.value.id) {
-        // 添加id
-        payload.id = form.value.id
+        // 编辑模式：如果没有改变音频文件，使用原有接口
+        const payload = {
+          id: form.value.id,
+          name: form.value.name,
+          description: form.value.tags.length ? form.value.tags.join(',') : null,
+          tts_provider_id: form.value.tts_provider_id,
+          reference_path: form.value.reference_path || null
+        }
         await updateVoice(form.value.id, payload)
         ElMessage.success('修改成功')
       } else {
-        
-        await createVoice(payload)
-        ElMessage.success('创建成功')
+        // 新建模式
+        if (form.value.reference_path) {
+          // 有选择本地音频：必须通过上传接口创建，保证 Docker 可用
+          if (!native?.readFileAsBuffer) {
+            ElMessage.error('当前环境不支持上传本地音频文件，请重启应用后重试')
+            return
+          }
+
+          try {
+            // 读取文件内容
+            const fileBuffer = await native.readFileAsBuffer(form.value.reference_path)
+            const fileName = form.value.reference_path.split(/[\\\/]/).pop()
+
+            // 构建 FormData
+            const formData = new FormData()
+            formData.append('name', form.value.name)
+            formData.append('tts_provider_id', form.value.tts_provider_id)
+            formData.append('description', form.value.tags.length ? form.value.tags.join(',') : null)
+            formData.append('is_multi_emotion', '0')
+
+            // 创建 Blob 并添加到 FormData
+            const blob = new Blob([fileBuffer])
+            formData.append('audio_file', blob, fileName)
+
+            // 使用上传接口
+            await uploadAndCreateVoice(formData)
+            ElMessage.success('创建成功')
+          } catch (uploadError) {
+            console.error('上传音色失败:', uploadError)
+            ElMessage.error('上传音色失败，请重试')
+            return
+          }
+        } else {
+          // 没有选择参考音频：允许创建一个“无参考音频”的占位音色
+          const payload = {
+            name: form.value.name,
+            description: form.value.tags.length ? form.value.tags.join(',') : null,
+            tts_provider_id: form.value.tts_provider_id,
+            reference_path: null
+          }
+          await createVoice(payload)
+          ElMessage.success('创建成功（无参考音频）')
+        }
       }
 
       dialogVisible.value = false

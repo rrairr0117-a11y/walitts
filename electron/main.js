@@ -212,6 +212,17 @@ ipcMain.handle('dialog:pick-audio', async () => {
   return filePaths[0] // 返回绝对路径
 })
 
+// 读取文件内容
+ipcMain.handle('fs:read-file', async (event, filePath) => {
+  try {
+    const buffer = fs.readFileSync(filePath)
+    return buffer
+  } catch (e) {
+    console.error('读取文件失败:', e)
+    throw e
+  }
+})
+
 // 打开文件夹
 ipcMain.handle('dialog:open-folder', async (event, folderPath) => {
   if (!folderPath) return

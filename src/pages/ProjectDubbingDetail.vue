@@ -678,13 +678,14 @@ function restoreQueue() {
 
 // 根据后端推送更新本地行
 function applyLineUpdate(msg) {
-    const { line_id, status } = msg
+    const { line_id, status, audio_path } = msg
     const idx = lines.value.findIndex(l => l.id === line_id)
     if (idx >= 0) {
         const old = lines.value[idx]
         lines.value[idx] = {
             ...old,
             status,                                  // 'pending' | 'processing' | 'done' | 'failed'
+            ...(audio_path && { audio_path })       // 如果有 audio_path，更新它
         }
         // ✅ 关键：当生成完成时，强制重载对应 WaveCellPro
         if (status === 'done') {
@@ -1333,7 +1334,7 @@ function toggleVoicePlay(voiceId) {
     const voice = voicesOptions.value.find(v => v.id === voiceId)
     if (!voice?.reference_path) return ElMessage.warning('该音色未设置参考音频')
 
-    const src = native?.pathToFileUrl ? native.pathToFileUrl(voice.reference_path) : voice.reference_path
+    const src = toAccessibleUrl(voice.reference_path)
 
     if (currentVoiceId.value === voiceId) {
         // 切换暂停/继续
@@ -1363,10 +1364,12 @@ audioPlayer.addEventListener('ended', () => {
 
 
 
-function playLine(row) {
+function playAudio(row) {
     if (!row.audio_path) return
     try {
-        const src = native?.pathToFileUrl ? native.pathToFileUrl(row.audio_path) : row.audio_path
+        // 使用统一的路径转换函数
+        const src = toAccessibleUrl(row.audio_path)
+        
         audioPlayer.pause()
         audioPlayer.src = src
         audioPlayer.currentTime = 0
@@ -1923,8 +1926,22 @@ async function submitImportThird() {
 
 function getFolderFromPath(audioPath) {
     if (!audioPath) return ''
-    const sep = audioPath.includes('\\') ? '\\' : '/'
-    return audioPath.slice(0, audioPath.lastIndexOf(sep))
+    
+    // 如果是 Docker 容器路径，需要转换为本地路径
+    let localPath = audioPath
+    if (audioPath.startsWith('/app/IndexTTS-2/outputs/')) {
+        // 使用项目根路径 + 相对路径
+        const relativePath = audioPath.replace('/app/IndexTTS-2/outputs/', '')
+        localPath = settingsForm.value.project_root_path + '\\' + relativePath.replace(/\//g, '\\')
+    } else if (audioPath.startsWith('/app/IndexTTS-2/')) {
+        // 其他 Docker 路径，尝试映射到本地
+        const relativePath = audioPath.replace('/app/IndexTTS-2/', '')
+        const baseDir = settingsForm.value.project_root_path || 'G:\\indextts2\\waliTTS\\wali'
+        localPath = baseDir + '\\' + relativePath.replace(/\//g, '\\')
+    }
+    
+    const sep = localPath.includes('\\') ? '\\' : '/'
+    return localPath.slice(0, localPath.lastIndexOf(sep))
 }
 const replaceFilename = (p, name) => (p ? p.replace(/[^/\\]+$/, name) : name)
 const addTempPrefix = (p) => (p ? p.replace(/([^/\\]+)$/, 'temp_$1') : null)
@@ -2116,7 +2133,7 @@ function playVoice(voiceId) {
     }
 
     try {
-        const src = native?.pathToFileUrl ? native.pathToFileUrl(voice.reference_path) : voice.reference_path
+        const src = toAccessibleUrl(voice.reference_path)
         audioPlayer.pause()
         audioPlayer.src = src
         audioPlayer.currentTime = 0
@@ -2129,6 +2146,7 @@ function playVoice(voiceId) {
 // 音频处理
 import WaveCellPro from '../components/WaveCellPro.vue'
 import { fa } from 'element-plus/es/locales.mjs'
+import { toAccessibleUrl } from '../utils/pathUtils'
 // 行音频版本号：lineId -> number
 const audioVer = ref(new Map())
 
@@ -2142,18 +2160,10 @@ function waveKey(row) {
 function waveSrc(row) {
     if (!row.audio_path) return ''
     
-    let base = row.audio_path
+    // 使用统一的路径转换函数
+    const base = toAccessibleUrl(row.audio_path)
     
-    // Electron 环境：使用 native.pathToFileUrl
-    if (native?.pathToFileUrl) {
-        base = native.pathToFileUrl(row.audio_path)
-    } 
-    // Web 环境：如果是相对路径，转换为 HTTP 路径
-    else if (!base.startsWith('http://') && !base.startsWith('https://')) {
-        // 相对路径：1/1/audio/id_1.wav -> http://localhost:8000/output/1/1/audio/id_1.wav
-        base = `http://localhost:8000/output/${base}`
-    }
-    
+    // 添加版本号用于缓存控制
     const v = getVer(row.id)
     return v ? `${base}${base.includes('?') ? '&' : '?'}v=${v}` : base
 }
@@ -2287,7 +2297,7 @@ function playVoice2(voiceId) {
     const voice = voicesOptions.value.find(v => v.id === voiceId)
     if (!voice?.reference_path) return ElMessage.warning('该音色无参考音频')
     try {
-        const src = native?.pathToFileUrl ? native.pathToFileUrl(voice.reference_path) : voice.reference_path
+        const src = toAccessibleUrl(voice.reference_path)
         audioPlayer.pause()
         audioPlayer.src = src
         audioPlayer.currentTime = 0

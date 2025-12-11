@@ -26,6 +26,14 @@ contextBridge.exposeInMainWorld('native', {
    * @returns {string}
    */
   pathToFileUrl,
+  
+  /**
+   * 读取文件内容为 Buffer
+   * @param {string} filePath - 文件路径
+   * @returns Promise<Buffer> 文件内容
+   */
+  readFileAsBuffer: (filePath) => ipcRenderer.invoke('fs:read-file', filePath),
+  
   // 
   openFolder: (folderPath) => ipcRenderer.invoke('dialog:open-folder', folderPath),
   // 选择音色文件夹

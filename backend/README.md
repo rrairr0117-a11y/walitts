@@ -26,9 +26,18 @@
    ```
 
    **必需文件**：
-   - `checkpoints/`：TTS模型文件目录，包含 gpt.pth、s2mel.pth 等模型
-     - 从完整分发包中复制
-     - 或单独下载模型文件
+   - `checkpoints/`：TTS模型文件目录（约5GB），包含：
+     - `config.yaml` - 模型配置文件（必需！）
+     - `gpt.pth` - GPT模型（约3.4GB）
+     - `s2mel.pth` - S2Mel模型（约1.2GB）
+     - `bpe.model` - BPE分词模型
+     - `pinyin.vocab` - 拼音词表
+     - `qwen0.6bemo4-merge/` - Qwen情绪模型目录
+     - 其他配置文件
+   
+   **获取方式**：
+   - 从完整分发包中复制 `checkpoints/` 目录
+   - 或运行 `准备模型文件.bat` 自动复制
 
    **自动创建**：
    - `wali.db`：首次启动时自动创建空数据库
@@ -137,11 +146,31 @@ docker-compose up -d
 - 查看日志：`docker-compose logs`
 
 #### 3. 模型加载失败
-- 确保 `checkpoints/` 目录包含所有模型文件：
-  - `gpt.pth` (约3.4GB)
-  - `s2mel.pth` (约1.2GB)
-  - 其他配置文件
-- 检查文件权限
+
+**错误信息**：
+```
+模型加载失败: [Errno 2] No such file or directory: '/app/IndexTTS-2/checkpoints/config.yaml'
+```
+
+**原因**：checkpoints 目录缺少必需的模型文件
+
+**解决方法**：
+```bash
+# 方法1：运行准备脚本
+准备模型文件.bat
+
+# 方法2：手动复制
+# 从完整分发包或源目录复制所有文件到 backend/checkpoints/
+```
+
+**必需文件清单**：
+- ✅ `config.yaml` - 模型配置（必需！）
+- ✅ `gpt.pth` - GPT模型（约3.4GB）
+- ✅ `s2mel.pth` - S2Mel模型（约1.2GB）
+- ✅ `bpe.model` - BPE分词模型
+- ✅ `pinyin.vocab` - 拼音词表
+- ✅ `qwen0.6bemo4-merge/` - Qwen情绪模型目录
+- ✅ 其他 .pt 和 .json 配置文件
 
 #### 4. 数据库连接失败
 - 确保 `wali.db` 文件存在于 backend 目录

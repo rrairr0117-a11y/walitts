@@ -235,8 +235,15 @@
                                 矫正字幕
                             </el-button>
 
-                            <el-switch v-model="playMode" active-text="顺序播放" inactive-text="单条播放"
-                                active-value="sequential" inactive-value="single" />
+                            <el-switch 
+                                v-model="playMode" 
+                                active-text="顺序播放" 
+                                inactive-text="单条播放"
+                                active-value="sequential" 
+                                inactive-value="single"
+                                inline-prompt
+                                style="--el-switch-on-color: #409eff; --el-switch-off-color: #dcdfe6;"
+                                class="play-mode-switch" />
 
 
                         </div>
@@ -3664,6 +3671,22 @@ function restoreLastChapter() {
 
 .w220 {
     width: 220px;
+}
+
+/* 播放模式开关样式 */
+.play-mode-switch {
+    --el-switch-on-color: #67c23a;
+    --el-switch-off-color: #409eff;
+}
+
+:deep(.play-mode-switch .el-switch__core) {
+    min-width: 120px;
+    height: 32px;
+}
+
+:deep(.play-mode-switch .el-switch__inner) {
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .w260 {

@@ -36,7 +36,9 @@
      - 其他配置文件
    
    **获取方式**：
-   - 从完整分发包中复制 `checkpoints/` 目录
+   - **夸克网盘**（推荐）：https://pan.quark.cn/s/d39c2e01d20c 提取码：`/~700439XDTO~:/`
+   - 下载 `checkpoints.7z` 后解压到 `backend/checkpoints/` 目录
+   - 或从完整分发包中复制 `checkpoints/` 目录
    - 或运行 `准备模型文件.bat` 自动复制
 
    **自动创建**：
@@ -57,11 +59,67 @@ cd backend
 docker-compose up -d
 ```
 
-### 镜像说明
+### 镜像获取方式
 
-- **镜像地址**: `crpi-gpb2zeuxu5n5h1lc.cn-chengdu.personal.cr.aliyuncs.com/rrairr/wali-indextts2:latest`
-- **镜像大小**: 约 15.9GB（包含所有依赖）
+#### 方式1：在线拉取（需要网络）
+```bash
+docker pull crpi-gpb2zeuxu5n5h1lc.cn-chengdu.personal.cr.aliyuncs.com/rrairr/wali-indextts2:latest
+```
+
+#### 方式2：离线导入（推荐，无需网络）
+
+**📥 下载离线镜像包**：
+- 文件名：`wali-indextts2-v1.0.0.7z` (4.81 GB)
+- 夸克网盘：https://pan.quark.cn/s/e9197d2246fa
+- 提取码：`/~917639XJH5~:/`
+
+**🔧 导入步骤**：
+
+1. **解压7z文件**
+   ```bash
+   # 使用7-Zip解压（Windows右键 → 7-Zip → 解压到当前文件夹）
+   # 或命令行：
+   7z x wali-indextts2-v1.0.0.7z
+   
+   # 解压后得到：wali-indextts2-v1.0.0.tar (约4.85 GB)
+   ```
+
+2. **导入Docker镜像**
+   ```bash
+   # 进入tar文件所在目录
+   cd D:\Downloads  # 替换为你的实际路径
+   
+   # 导入镜像
+   docker load -i wali-indextts2-v1.0.0.tar
+   
+   # 等待导入完成，会显示：
+   # Loaded image: crpi-gpb2zeuxu5n5h1lc.cn-chengdu.personal.cr.aliyuncs.com/rrairr/wali-indextts2:latest
+   ```
+
+3. **验证导入成功**
+   ```bash
+   docker images | findstr wali-indextts2
+   
+   # 应该看到：
+   # crpi-gpb2zeuxu5n5h1lc.cn-chengdu.personal.cr.aliyuncs.com/rrairr/wali-indextts2   latest   15.9GB
+   ```
+
+4. **删除临时文件（可选）**
+   ```bash
+   # 导入成功后可以删除tar文件释放空间
+   del wali-indextts2-v1.0.0.tar
+   ```
+
+**⚠️ 重要说明**：
+- 导入后的镜像名称为：`crpi-gpb2zeuxu5n5h1lc.cn-chengdu.personal.cr.aliyuncs.com/rrairr/wali-indextts2:latest`
+- 这个名称与 `docker-compose.yml` 中的配置完全一致，无需修改任何配置
+- 如果镜像名称不匹配，docker-compose会尝试重新拉取镜像
+
+**镜像信息**：
+- **镜像大小**: 15.9GB（包含所有依赖）
 - **GPU 要求**: NVIDIA GPU with CUDA support
+- **包含内容**: Python环境、PyTorch、CUDA库、IndexTTS-2代码
+- **不包含**: 模型文件（需单独下载）
 
 ### 数据持久化
 
